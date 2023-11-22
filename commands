@@ -1,0 +1,122 @@
+
+wget https://oss-cdn.nebula-graph.io/package/<release_version>/nebula-graph-<release_version>.ubuntu2004.amd64.deb
+
+
+wget https://oss-cdn.nebula-graph.io/package/3.6.0/nebula-graph-3.6.0.ubuntu2004.amd64.deb
+wget https://oss-cdn.nebula-graph.io/package/3.6.0/nebula-graph-3.6.0.ubuntu2004.amd64.deb.sha256sum.txt
+
+
+
+(venv) ubuntu@ip-172-31-83-118:~/demo-kg-build/installs$ lsb_release -a
+No LSB modules are available.
+Distributor ID: Ubuntu
+Description:    Ubuntu 22.04.3 LTS
+Release:        22.04
+Codename:       jammy
+
+
+
+
+sudo /usr/local/nebula/scripts/nebula.service
+
+'''
+[-v] [-c <config_file_path>]
+<start | stop | restart | kill | status>
+<metad | graphd | storaged | all>
+'''
+
+sudo /usr/local/nebula/scripts/nebula.service start all
+'''
+[INFO] Starting nebula-metad...
+[INFO] Done
+[INFO] Starting nebula-graphd...
+[INFO] Done
+[INFO] Starting nebula-storaged...
+[INFO] Done
+'''
+
+
+sudo /usr/local/nebula/scripts/nebula.service stop all
+sudo /usr/local/nebula/scripts/nebula.service status all
+
+
+
+
+
+wget https://github.com/vesoft-inc/nebula-console/releases/download/v3.6.0/nebula-console-darwin-amd64-v3.6.0
+
+
+
+
+
+
+
+
+wget https://go.dev/dl/go1.21.4.linux-amd64.tar.gz
+sudo rm -rf /usr/local/go 
+sudo tar -C /usr/local -xzf go1.21.4.linux-amd64.tar.gz
+export PATH=$PATH:/usr/local/go/bin
+
+
+# sudo apt-get install gccgo-go
+# sudo apt-get remove  gccgo-go
+# sudo apt-get remove  --auto-remove  gccgo-go
+
+# sudo update-alternatives --set go /usr/bin/go-5
+# GOROOT_BOOTSTRAP=/usr ./make.bash
+git clone https://github.com/vesoft-inc/nebula-console
+cd nebula-console
+make
+
+
+# ./nebula-console -addr=0.0.0.0 -port 9669 -u root -p nebula
+./nebula-console -addr=127.0.0.1 -port 9669 -u root -p nebula
+./nebula-console -u root -p nebula
+
+./nebula-console -h
+
+
+ADD HOSTS <ip>:<port> [,<ip>:<port> ...];
+ADD HOSTS "<hostname>":<port> [,"<hostname>":<port> ...];
+
+DROP HOSTS <ip>:<port> [,<ip>:<port> ...];
+DROP HOSTS "<hostname>":<port> [,"<hostname>":<port> ...];
+
+
+ADD HOSTS 127.0.0.1:9664;
+
+
+CREATE SPACE guardians(vid_type=FIXED_STRING(256), partition_num=1, replica_factor=1);
+:sleep 10;
+USE guardians;
+CREATE TAG entity(name string);
+CREATE EDGE relationship(relationship string);
+:sleep 10;
+CREATE TAG INDEX entity_index ON entity(name(256));
+
+
+
+
+
+'''
+
+
+(root@nebula) [(none)]> SHOW HOSTS;
++-------------+------+-----------+--------------+----------------------+------------------------+---------+
+| Host        | Port | Status    | Leader count | Leader distribution  | Partition distribution | Version |
++-------------+------+-----------+--------------+----------------------+------------------------+---------+
+| "127.0.0.1" | 9664 | "OFFLINE" | 0            | "No valid partition" | "No valid partition"   |         |
++-------------+------+-----------+--------------+----------------------+------------------------+---------+
+Got 1 rows (time spent 646µs/1.046076ms)
+
+Wed, 22 Nov 2023 11:18:49 UTC
+
+(root@nebula) [(none)]> CREATE SPACE guardians(vid_type=FIXED_STRING(256), partition_num=1, replica_factor=1);
+[ERROR (-1005)]: Host not enough!
+
+Wed, 22 Nov 2023 11:19:05 UTC
+
+(root@nebula) [(none)]> exit 
+
+'''
+git submodule add <url> installs/nebula-console
